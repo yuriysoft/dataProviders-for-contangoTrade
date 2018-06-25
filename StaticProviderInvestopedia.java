@@ -17,32 +17,35 @@ import java.util.StringTokenizer;
 import contangoAPI.api.ABaseStaticProvider;
 import contangoAPI.api.Bar;
 
-public class StaticProviderQuotemedia extends ABaseStaticProvider {
-  
-  /** 
+public class StaticProviderInvestopedia extends ABaseStaticProvider {
+
+  /**
    * format of request:
    * 
-   * http://app.quotemedia.com/quotetools/getHistoryDownload.csv?
-   *   &webmasterId=501&startDay=1&startMonth=1&startYear=1900&endDay=17&endMonth=5
-   *   &endYear=2017&isRanged=true&symbol=[SYMBOL NAME]
+   * https://www.investopedia.com/markets/api/partial/historical/?Symbol=MSFT
+   *    &Type=Historical+Prices&Timeframe=Daily
+   *    &StartDate=Nov+28%2C+2017
+   *    &EndDate=Dec+05%2C+2017
    */
 
   @Override
-  public ArrayList<Bar> getData(String symbol, LocalDateTime ldt1, LocalDateTime ldt2, LocalTime lt1, LocalTime lt2,
-      int timeframe) {
+  public ArrayList<Bar> getData(String symbol, LocalDateTime ldt1, LocalDateTime ldt2,
+      LocalTime lt1, LocalTime lt2, int timeframe) {
 
     ArrayList<Bar> dataItems = new ArrayList<Bar>();
     String strUrl = getURL(symbol, ldt1, ldt2);
     try {
       URL url = new URL(strUrl);
       try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
-        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        final DateFormat df = new SimpleDateFormat("dd MMM,yy", Locale.ENGLISH);
         String inputLine;
-        in.readLine(); // skip 1-st line
+        in.readLine(); // skip header line
         while ((inputLine = in.readLine()) != null) {
           StringTokenizer st = new StringTokenizer(inputLine, ",");
           Date date = df.parse(st.nextToken());
           if (date.getTime() > java.sql.Timestamp.valueOf(ldt2).getTime())
+            continue;
+          if (date.getTime() < java.sql.Timestamp.valueOf(ldt1).getTime())
             continue;
           double open = Double.parseDouble(st.nextToken());
           double high = Double.parseDouble(st.nextToken());
@@ -61,28 +64,51 @@ public class StaticProviderQuotemedia extends ABaseStaticProvider {
   }
 
   /**
+   * Convert number of month to name
+   * @param month: number of month
+   * @return month as name
+   */
+  private static String theMonth(int month) {
+    String[] monthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    return monthNames[month];
+  }
+
+  /**
+   * Get date as string
+   * 
+   * @param ldt:
+   *          local date time
+   * @return date: as string
+   */
+  private static String dt2String(LocalDateTime ldt) {
+    //Nov+28%2C+2017
+    //final DateFormat df = new SimpleDateFormat("MMM+dd,+yyyy", Locale.ENGLISH);
+    return String.format("%s+%02d,+%04d",
+        StaticProviderInvestopedia.theMonth(ldt.getMonthValue() - 1), ldt.getDayOfMonth(), ldt.getYear());
+  }
+  /**
    * Prepare URL string for the data provider
-   * @param symbol: security code
-   * @param ldt1: start date
-   * @param ldt2: end date
+   * 
+   * @param symbol:
+   *          security code
+   * @param ldt1:
+   *          start date
+   * @param ldt2:
+   *          end date
    * @return URL string
    */
   private static String getURL(String symbol, LocalDateTime ldt1, LocalDateTime ldt2) {
     StringBuilder buf = new StringBuilder();
-    buf.append("http://app.quotemedia.com/quotetools/getHistoryDownload.csv?&webmasterId=501");
-    buf.append("&startDay=").append(String.valueOf(ldt1.getDayOfMonth()));
-    buf.append("&startMonth=").append(String.valueOf(ldt1.getMonthValue() - 1));
-    buf.append("&startYear=").append(String.valueOf(ldt1.getYear()));
-    buf.append("&endDay=").append(String.valueOf(ldt2.getDayOfMonth()));
-    buf.append("&endMonth=").append(String.valueOf(ldt2.getMonthValue() - 1));
-    buf.append("&endYear=").append(String.valueOf(ldt2.getYear()));
-    buf.append("&isRanged=true&symbol=").append(symbol);
+    buf.append("https://www.investopedia.com/markets/api/partial/historical/?Symbol=").append(symbol);
+    buf.append("&Type=Historical+Prices&Timeframe=Daily");
+    buf.append("&StartDate=").append(dt2String(ldt1));
+    buf.append("&endDate=").append(dt2String(ldt2));
     return buf.toString();
   }
-  
+
   @Override
   public String getDescription() {
-    return "Quotemedia data source (DAILY)";
+    return "Investopedia data source (DAILY)";
   }
 
   @Override

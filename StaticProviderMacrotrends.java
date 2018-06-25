@@ -46,7 +46,7 @@ public class StaticProviderMacrotrends extends ABaseStaticProvider {
           StringTokenizer st = new StringTokenizer(inputLine, ",");
           Date date = df.parse(st.nextToken());
           if (date.getTime() > java.sql.Timestamp.valueOf(ldt2).getTime())
-            break;
+            continue;
           if (date.getTime() < java.sql.Timestamp.valueOf(ldt1).getTime())
             continue;
           double open = Double.parseDouble(st.nextToken());
