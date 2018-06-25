@@ -18,14 +18,14 @@ import contangoAPI.api.ABaseStaticProvider;
 import contangoAPI.api.Bar;
 
 public class StaticProviderGoogle extends ABaseStaticProvider {
-
+  
   /**
    * Convert number of month to name
-   * @param month: number of month
+   * @param month: number of month (1..12)
    * @return month as name
    */
   private static String theMonth(int month) {
-    String[] monthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+    String[] monthNames = { "", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
     return monthNames[month];
   }
   
@@ -70,10 +70,10 @@ public class StaticProviderGoogle extends ABaseStaticProvider {
   private static String getURL(String symbol, LocalDateTime ldt1, LocalDateTime ldt2) {
     StringBuilder buf = new StringBuilder();
     buf.append("http://www.google.com/finance/historical?q=").append(symbol);
-    buf.append("&histperiod=daily&startdate=").append(StaticProviderGoogle.theMonth(ldt1.getMonthValue() - 1));
+    buf.append("&histperiod=daily&startdate=").append(theMonth(ldt1.getMonthValue()));
     buf.append("+").append(String.valueOf(ldt1.getDayOfMonth()));
     buf.append("+").append(String.valueOf(ldt1.getYear()));
-    buf.append("&enddate=").append(StaticProviderGoogle.theMonth(ldt2.getMonthValue() - 1));
+    buf.append("&enddate=").append(theMonth(ldt2.getMonthValue()));
     buf.append("+").append(String.valueOf(ldt2.getDayOfMonth()));
     buf.append("+").append(String.valueOf(ldt2.getYear()));
     buf.append("&output=csv");
