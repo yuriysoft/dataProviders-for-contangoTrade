@@ -18,8 +18,6 @@ import contangoAPI.api.ABaseStaticProvider;
 import contangoAPI.api.Bar;
 
 public class StaticProviderGoogle extends ABaseStaticProvider {
-  
-  //"http://ichart.finance.yahoo.com/table.csv?s=MSFT&a=0&b=1&c=2010&d=0&e=1&f=2016&ignore=.csv";
 
   /**
    * Convert number of month to name
