@@ -25,6 +25,7 @@ import contangoStaticProvider.json.JsonValue;
 /**
  * INTRINIO Data Source plug-in for ContangoTrade software
  *
+ * NOTE: Need extra library minimal-json.jar
  */
 public class StaticProviderIntrinio extends ABaseStaticProvider {
 
