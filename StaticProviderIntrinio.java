@@ -1,11 +1,3 @@
-/**
- * INTRINIO Data Source plug-in for ContangoTrade software
- *
- * Extra libraries:
- *   - minimal-json.jar
- *   - contangoAPI.jar
- */
-
 package contangoStaticProvider;
 
 import java.io.BufferedReader;
@@ -30,6 +22,10 @@ import contangoStaticProvider.json.Json;
 import contangoStaticProvider.json.JsonArray;
 import contangoStaticProvider.json.JsonValue;
 
+/**
+ * INTRINIO Data Source plug-in for ContangoTrade software
+ *
+ */
 public class StaticProviderIntrinio extends ABaseStaticProvider {
 
   private static final String KEY = "username";
@@ -46,7 +42,7 @@ public class StaticProviderIntrinio extends ABaseStaticProvider {
 
     for (int pageNum = 1; pageNum <= totalPages; pageNum++) {
       try {
-        strUrl = getUrl(symbol, dt2String(ldt1), dt2String(ldt2), pageNum);
+        strUrl = getUrl(symbol, ldt1, ldt2, pageNum);
         URL url = new URL(strUrl);
         
         String authentication = getParameter(KEY) + ":" + getParameter(PASS);
@@ -119,12 +115,12 @@ public class StaticProviderIntrinio extends ABaseStaticProvider {
    * @param page: page number
    * @return URL string
    */
-  private static String getUrl(String sym, String szDT1, String szDT2, int page) {
+  private static String getUrl(String sym, LocalDateTime ldt1, LocalDateTime ldt2, int page) {
     StringBuilder buf = new StringBuilder();
     buf.append("https://api.intrinio.com/prices?");
     buf.append("identifier=").append(sym);
-    buf.append("&start_date=").append(szDT1);
-    buf.append("&end_date=").append(szDT2);
+    buf.append("&start_date=").append(dt2String(ldt1));
+    buf.append("&end_date=").append(dt2String(ldt2));
     buf.append("&page_size=10000");
     buf.append("&page_number=").append(String.valueOf(page));
     return buf.toString();
