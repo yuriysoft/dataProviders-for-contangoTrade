@@ -1,5 +1,9 @@
 /**
- The class uses minimal-json.jar
+ * INTRINIO Data Source plug-in for ContangoTrade software
+ *
+ * Extra libraries:
+ *   - minimal-json.jar
+ *   - contangoAPI.jar
  */
 
 package contangoStaticProvider;
@@ -26,10 +30,6 @@ import contangoStaticProvider.json.Json;
 import contangoStaticProvider.json.JsonArray;
 import contangoStaticProvider.json.JsonValue;
 
-/**
- * INTRINIO Data Source plug-in for ContangoTrade software
- * 
- */
 public class StaticProviderIntrinio extends ABaseStaticProvider {
 
   private static final String KEY = "username";
