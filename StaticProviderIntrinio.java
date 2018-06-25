@@ -1,3 +1,7 @@
+/**
+ The class uses minimal-json.jar
+ */
+
 package contangoStaticProvider;
 
 import java.io.BufferedReader;
@@ -24,7 +28,7 @@ import contangoStaticProvider.json.JsonValue;
 
 /**
  * INTRINIO Data Source plug-in for ContangoTrade software
- *
+ * 
  */
 public class StaticProviderIntrinio extends ABaseStaticProvider {
 
