@@ -30,7 +30,7 @@ public class StaticProviderFinContent extends ABaseStaticProvider {
       LocalTime lt1, LocalTime lt2, int timeframe) {
 
     ArrayList<Bar> dataItems = new ArrayList<Bar>();
-    String strUrl = getURL(symbol, ldt1, ldt2);
+    String strUrl = getURL(symbol, ldt2);
     try {
       URL url = new URL(strUrl);
       try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
@@ -77,7 +77,7 @@ public class StaticProviderFinContent extends ABaseStaticProvider {
    *          end date
    * @return URL string
    */
-  private static String getURL(String symbol, LocalDateTime ldt1, LocalDateTime ldt2) {
+  private static String getURL(String symbol, LocalDateTime ldt2) {
     StringBuilder buf = new StringBuilder();
     buf.append("http://markets.financialcontent.com/stocks/action/gethistoricaldata?Symbol=")
         .append(symbol);
