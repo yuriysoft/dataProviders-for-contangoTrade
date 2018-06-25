@@ -30,7 +30,7 @@ public class StaticProviderMacrotrends extends ABaseStaticProvider {
       LocalTime lt1, LocalTime lt2, int timeframe) {
 
     ArrayList<Bar> dataItems = new ArrayList<Bar>();
-    String strUrl = getURL(symbol);
+    String strUrl = "http://download.macrotrends.net/assets/php/stock_data_export.php?t=" + symbol;
     try {
       URL url = new URL(strUrl);
       try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
@@ -63,20 +63,6 @@ public class StaticProviderMacrotrends extends ABaseStaticProvider {
       throw new RuntimeException(String.format("URL problem: %s", strUrl), e);
     }
     return dataItems;
-  }
-
-  /**
-   * Prepare URL string for the data provider
-   * 
-   * @param symbol:
-   *          security code
-   * @return URL string
-   */
-  private static String getURL(String symbol) {
-    StringBuilder buf = new StringBuilder();
-    buf.append("http://download.macrotrends.net/assets/php/stock_data_export.php?t=")
-        .append(symbol);
-    return buf.toString();
   }
 
   @Override
